@@ -182,6 +182,12 @@ void dependent_point_computation() {
 	end = std::chrono::system_clock::now();
 	cpu_dependency = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 	std::cout << " dependent point computation time: " << cpu_dependency << "[microsec]\n\n";
+
+	// print out the dependent point ids of each point in the data set
+	for (unsigned int i = 0; i < dataset_pt.size(); ++i) {
+		std::cout << dataset_pt[i].dependent_point_id << " ";
+	}
+	std::cout << "\n";
 }
 
 // label propagation
@@ -282,8 +288,16 @@ int main() {
 	// dependent point computation
 	dependent_point_computation();
 
+	std::cout << std::endl;
+
 	// cluster assignment
 	computation_label_propagation();
+
+	// print out the dependent point ids of each point in the data set
+	for (unsigned int i = 0; i < dataset_pt.size(); ++i) {
+		std::cout << dataset_pt[i].dependent_point_id << " ";
+	}
+	std::cout << "\n";
 
 	// output computation time
 	output_cpu_time();

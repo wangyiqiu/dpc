@@ -107,7 +107,8 @@ void input_data() {
 		float x = 0, y = 0;
 
 		// file input
-		std::string f_name = "../_dataset/synthetic.txt";
+		std::string f_name = "../../../dataset/data.csv";
+		// std::string f_name = "../_dataset/synthetic.txt";
 		std::ifstream ifs_file(f_name);
 
 		// error check
@@ -116,6 +117,48 @@ void input_data() {
 			std::exit(0);
 		}
 
+		// file read
+		while (!ifs_file.eof()) {
+
+			// read in the line
+			std::string line;
+			std::getline(ifs_file, line);
+
+			// if the line is empty break out of the loop
+			if (line.empty()) break;
+
+			// parse the line and separate the two values delimited by a comma
+			std::stringstream ss(line);
+			std::string token;
+			std::getline(ss, token, ',');
+			x = std::stof(token);
+			std::getline(ss, token, ',');
+			y = std::stof(token);
+
+			// print out the x and y values
+			// std::cout << id << ": " << x << ", " << y << std::endl;
+
+			p[0] = x;
+			p[1] = y;
+
+			if (x > d_max[0]) d_max[0] = x;
+			if (x < d_min[0]) d_min[0] = x;
+			if (y > d_max[1]) d_max[1] = y;
+			if (y < d_min[1]) d_min[1] = y;
+
+			// update pt
+			p_.update_id(id);
+			p_.update_val(p);
+
+			// insert into dataset
+			dataset_pt.push_back(p_);
+
+			// increment identifier
+			++id;
+
+		}
+
+		/*
 		// file read
 		while (!ifs_file.eof()) {
 
@@ -140,10 +183,11 @@ void input_data() {
 			// increment identifier
 			++id;
 		}
+		*/
 	}
 
 	// normalization if necessary
-	bool flag = 1;
+	bool flag = 0;
 	if (flag) {
 
 		for (unsigned int i = 0; i < dimensionality; ++i) d_max[i] -= d_min[i];
@@ -154,6 +198,8 @@ void input_data() {
 				dataset_pt[i][j] /= d_max[j];
 				dataset_pt[i][j] *= coord_max;
 			}
+			// print point
+			std::cout << dataset_pt[i][0] << ", " << dataset_pt[i][1] << std::endl;
 		}
 	}
 
